@@ -1,0 +1,134 @@
+{
+    "name": "Sufficient Specification - Procedural Specification v2",
+    "description": "Rename Scope and Task Specification; add more examples and clearer decision borders; add confidence rating to output.",
+    "results": [],
+    "observations": "Slight performance degradation.",
+    "prompt_template": {
+        "messages": [
+            {
+                "role": "system",
+                "content": "\nYou are an expert data analyst and annotator. Your purpose is to analyze a user query to determine if the **analytical procedure** it requests is sufficiently specified to be answerable in an insight extraction setting.\n\nThis insight extraction setting requires that the system can execute a set of analytical steps on a provided dataset to produce an answer. For this to be possible, the query must provide clear instructions on how to calculate, transform, and present the data.\n\nBefore you begin, apply this mental model: Imagine a junior analyst has already located the perfect, unambiguous dataset for the query (e.g., they have the table of \"all corporate financials for Fortune 500 companies from 2020-2025\"). Your job is to decide if the query gives them clear enough instructions on **what to do with that data**. If they would have to ask you, \"how should I calculate 'performance'?\" or \"what do you mean by 'relationship'?\", then the query is procedurally underspecified.\n\n-----\n\n### Procedural Specification Dimensions\n\nYou will analyze the query based on the following two dimensions of procedural specification.\n\n#### 1. Operation Specification (Binary: `Specified` / `Underspecified`)\n\nThis dimension evaluates the overall **analytical action** or goal requested. It identifies the primary verb of the data manipulation.\n\n* **`Specified`**: The query clearly formulates a goal or user intent that can be addressed with executable operations (e.g., list, count, rank, calculate the average, find the maximum, compare, sum, analyze how,...).\n* **`Underspecified`**: The query's intent is vague or lacks a clear analytical verb (e.g., \"What about our sales figures?\", \"Thoughts on employee retention?\", \"What is going on with...\").\n\n#### 2. Configuration Specification (Ternary: `Specified` / `Underspecified` / `Not Applicable`)\n\nThis dimension evaluates whether the **parameters, metrics, and methods** required to execute the specified operation are sufficiently specified.\n\nIf ambiguity arises from which data column or entity to use (e.g., for filtering the data), this is a Data Specification issue, not a Parameter Specification issue. \n\n* **`Specified`**: The query requires some calculation or application of an analytical method (even a simple one like `COUNT` or `AVERAGE`), and all parameters for that calculation are clear or can be handled by a standard, common-sense default. The explicit criteria include:\n    * **Ranking:** The specific metric used for ordering is clear (e.g., *top 5 by revenue*) or there is a plausible default (e.g., *the best sprinter* -> plausible default is assuming best meaning the fastest).\n    * **Grouping & Aggregation:** The categories for grouping and the function to apply are clear (e.g., *the average salary per department*).\n    * **Metric Calculation:** The formula for any derived values is stated or universally understood (e.g., *GDP per capita* or **the Accuracy of**).\n    * **Analytical Model:** The method for assessing a relationship is named or clear from context (e.g., *the pearson correlation between...*).\n* **`Underspecified`**: The query is missing an important analytical parameter. Use this category only if a missing parameter represents a significant analytical choice that could materially change the query's intent or result (e.g., the metric for \"best,\" the regression method to use).\n    * Examples:\n        * \"Who are the **most influential** senators?\" (The metric for \"influential\"—bills passed, media mentions, committee leadership—is a significant missing choice).\n        * \"Find the **center** of the data points\" (Could mean mean, median, or geometric centroid, all of which are valid but different).\n* **`Not Applicable`**: The query is a **simple factual lookup*** or **direct listing of existing data** that does not require any new value to be calculated or any complex analytical parameters to be set (e.g., \"List the names of drivers...\", \"When was the Eiffel Tower completed?\", \"What was the population of Paris in 2020?\").\n\nFor each dimension, analyze the query, classify it, and provide a confidence score between 0 and 1 (with 1 being absolutely certain). Indicate lower confidence if the query is borderline or if multiple interpretations are plausible.\n"
+            },
+            {
+                "role": "user",
+                "content": "Query: {query}"
+            }
+        ]
+    },
+    "common_request": {
+        "model": "gpt-5-2025-08-07",
+        "tools": null,
+        "top_p": null,
+        "parallel_tool_calls": null,
+        "prompt_cache_key": "sufficient_procedural_specification_v2",
+        "safety_identifier": null,
+        "service_tier": null,
+        "store": null,
+        "temperature": null,
+        "tool_choice": null,
+        "top_logprobs": null,
+        "conversation": null,
+        "include": null,
+        "input": null,
+        "instructions": null,
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "previous_response_id": null,
+        "prompt": null,
+        "reasoning": null,
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "ProceduralSpecification",
+                "schema": {
+                    "$defs": {
+                        "ConfigurationSpecification": {
+                            "properties": {
+                                "analysis": {
+                                    "description": "A brief analysis of the configuration specification.",
+                                    "title": "Analysis",
+                                    "type": "string"
+                                },
+                                "classification": {
+                                    "description": "Classification of the query's analytical parameters (e.g., calculations, ranking metrics).",
+                                    "enum": [
+                                        "Specified",
+                                        "Underspecified",
+                                        "Not Applicable"
+                                    ],
+                                    "title": "Classification",
+                                    "type": "string"
+                                },
+                                "confidence": {
+                                    "description": "Confidence level of the classification.",
+                                    "maximum": 1,
+                                    "minimum": 0,
+                                    "title": "Confidence",
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "analysis",
+                                "classification",
+                                "confidence"
+                            ],
+                            "title": "ConfigurationSpecification",
+                            "type": "object",
+                            "additionalProperties": false
+                        },
+                        "OperationSpecification": {
+                            "properties": {
+                                "analysis": {
+                                    "description": "A brief analysis of the operation specification.",
+                                    "title": "Analysis",
+                                    "type": "string"
+                                },
+                                "classification": {
+                                    "description": "Classification of the query's overall analytical action.",
+                                    "enum": [
+                                        "Specified",
+                                        "Underspecified"
+                                    ],
+                                    "title": "Classification",
+                                    "type": "string"
+                                },
+                                "confidence": {
+                                    "description": "Confidence level of the classification.",
+                                    "maximum": 1,
+                                    "minimum": 0,
+                                    "title": "Confidence",
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "analysis",
+                                "classification",
+                                "confidence"
+                            ],
+                            "title": "OperationSpecification",
+                            "type": "object",
+                            "additionalProperties": false
+                        }
+                    },
+                    "properties": {
+                        "operation_specification": {
+                            "$ref": "#/$defs/OperationSpecification"
+                        },
+                        "configuration_specification": {
+                            "$ref": "#/$defs/ConfigurationSpecification"
+                        }
+                    },
+                    "required": [
+                        "operation_specification",
+                        "configuration_specification"
+                    ],
+                    "title": "ProceduralSpecification",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "strict": true
+            }
+        },
+        "truncation": null
+    }
+}

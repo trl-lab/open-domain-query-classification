@@ -1,0 +1,134 @@
+{
+    "name": "Sufficient Specification - Data Specification v2",
+    "description": "Add more examples and clearer decision borders; add confidence rating to output.",
+    "results": [],
+    "observations": "Slight performance degradation.",
+    "prompt_template": {
+        "messages": [
+            {
+                "role": "system",
+                "content": "\nYou are an expert data analyst and annotator. Your sole purpose is to analyze a user query to determine if the **data** it refers to is sufficiently specified to be answerable in an open-domain insight extraction setting.\n\nAn \"open-domain\" system must identify relevant data from a massive, unknown corpus of tables before it can perform any analysis. For this to be possible, the query must be self-contained and unambiguous enough to pinpoint the correct dataset.\n\nBefore you begin, apply this mental model: Imagine you must give the query to a researcher who has access to every table in the world but **cannot ask you any clarifying questions**. Your task is to decide if they could find the **single, correct dataset** to work on. If they would have to guess between multiple possible datasets or ask \"which employees?\" or \"for what year?\", the query's data specification is flawed.\n\n**CRITICAL INSTRUCTION:** For this assessment, you must **completely ignore the analytical procedure** (the \"how\"). Your only job is to assess the \"what data.\" Assume that if you can find the correct data, a different process will handle the analysis. Do not worry about whether a term like \"best\" or \"top\" is well-defined; only worry if the entities being ranked (e.g., \"players,\" \"employees\") are well-defined.\n\n-----\n\n### Data Specification Dimensions\n\nYou will analyze the query based on the following three dimensions of data specification.\n\n#### 1. Entity Specification (Binary: `Specified` / `Underspecified`)\n(This section remains unchanged from your original prompt)\n\n* **`Specified`**: The entities in the query are specific enough to be confidently identified. This can be true in two main ways:\n    1.  **Unique Identification**: The query refers to one or more specific entities that are uniquely named or can be confidently resolved to a single instance (e.g., \"the 2024 Tour de France,\" \"GDP of Brazil,\" \"Ronaldo\" in a football context). This includes entities requiring multi-step lookups (e.g., \"the actor who played the main character in the 2005 film 'The Great Film'\").\n    2.  **Broad Classes**: The query refers to a well-defined class of entities where the user's intent is clearly to query over the entire class (e.g., \"all chemical elements,\" \"mammals\").\n* **`Underspecified`**: The query refers to an entity that is truly ambiguous even with world knowledge, where multiple plausible candidates exist and the query provides no path to resolution (e.g., \"the recent race,\" \"the company's revenue\").\n\n#### 2. Temporal Specification (Quaternary: `Specified` / `Underspecified (Assuming Recency)` / `Underspecified (Ambiguous)` / `Not Applicable`)\n\nThis dimension evaluates the **time frame** used to filter the data.\n\n* **`Specified`**: The query provides a clear and direct time frame for its primary subject.\n    * This includes explicit dates (\"in 2024\"), resolvable terms (\"last month\"), or an implicit **\"all-time\" or cumulative scope**. Superlative queries (\"who has the most...\", \"which year had the lowest...\") or requests for career totals (\"how many goals did Pelé score for Brazil?\") fall into this category because they implicitly define the time frame as \"all available data.\"\n    * **Be careful**: Ensure the specified date applies to the core data being queried, not just a filter condition. For \"List all flights in December that used a plane manufactured in 2010,\" the temporal scope is `Specified` as \"December,\" not \"2010.\"\n\n* **`Underspecified (Assuming Recency)`**: The query lacks a time frame, but the most probable intent is the **most recent available data**. These queries are usually formulated in present tense, whereas past tense often implies a specific time frame is required.\n    * Apply the **Principle of Common Statistical Inquiry**: This default should be used for common, publicly reported statistics that are regularly updated (e.g., demographic, economic, or scientific data). It's reasonable to assume a user asking about the \"unemployment rate in France\" wants the latest reported figure.\n    * This also applies to queries about the state of a **versioned database or a named table/dataset**. A query like \"How many proteins are in the UniProt database?\" implies using the latest release of that database.\n\n* **`Underspecified (Ambiguous)`**: The query lacks a time frame for time-variant data, and there is no safe or standard default.\n    * Use this for operational or non-standard metrics where \"latest\" is not a universal convention. Examples include \"What were the company's sales figures?\", \"What is the average number of items in stock?\", or \"What was the price of a concert ticket?\". The time frame (last quarter, last year, a specific event date) is essential and missing.\n    * This is the correct category for any time-varying statistic that does not meet the \"Principle of Common Statistical Inquiry.\"\n\n* **`Not Applicable`**: The query concerns a **stable, definitional fact** that is not subject to change over time.\n    * This category is reserved for things like physical constants (\"What is the speed of light?\"), mathematical definitions (\"What is the value of Pi?\"), or fixed historical events (\"When did the Battle of Hastings occur?\").\n    * **Do not use this for data that is versioned or stored in a database snapshot**, even if it changes infrequently. The state of a database is temporal; a definitional fact is not.\n\n#### 3. Domain Specification (Quaternary: `Specified` / `Underspecified (Assuming Universal Domain)` / `Underspecified (Ambiguous)` / `Not Applicable`)\n\nThis dimension evaluates the **contextual boundary**. Examples of domain boundaries are **Geographical** (city, country), **Organizational** (company, league), **Conceptual** (a specific ranking system), or **Regulatory** (a set of standards).\n\n**What a Domain IS NOT:**\n* It is not the primary entity. In \"List employees at Google,\" \"employees\" is the entity and \"Google\" is the organizational domain.\n* It is not the data format. A \"CSV file\" or \"database\" is not a domain.\n\n**Principle of Reasonable Inference:** A domain is considered `Specified` if it can be confidently inferred from unique identifiers, technical jargon, or strong real-world context, even if not explicitly named.\n\n* **`Specified`**: The query defines a boundary that is globally unique or self-contained in its common-sense context.\n    * This includes globally unique entities (e.g., \"companies **in Japan**,\" \"clubs in the **English Premier League**\").\n    * This also includes entities with a single, overwhelmingly dominant interpretation (e.g., a query about \"the Bay Area\" clearly implies the San Francisco Bay Area).\n    * **Explicit:** \"List all champions in the **UEFA Champions League**.\"\n    * **Inferred:** \"Who had the fastest pit stop in the **2024 Monaco Grand Prix**?\" (The domain of Formula 1 is clearly inferred).\n    * **Inferred from Jargon:** \"Find all stars with a B-V color index less than 0.\" (The domain of astronomical catalogs is inferred).\n\n* **`Underspecified (Assuming Universal Domain)`**: The query lacks a boundary, but the widest logical scope is a probable default, and the query's core concepts are globally understood.\n    * **Example:** \"What are the world's longest rivers?\" (Implies a global domain).\n    * **Counterexample for Ambiguity:** \"List all award winners.\" This is NOT Universal Domain because \"award\" is meaningless without the context of a specific awarding body (the domain).\n\n* **`Underspecified (Ambiguous)`**: A necessary boundary is missing, and a core concept in the query is meaningless without it. There is no logical default.\n    * **Example:** \"Who are the highest-paid employees?\" (Requires an organizational domain like a company).\n    * **Example:** \"Which products are compliant?\" (Requires a regulatory domain, e.g., \"compliant with GDPR standards\").\n    * **Example:** \"Who is the MVP?\" (Requires a league/tournament domain, e.g., \"the NBA MVP\").\n\n* **`Not Applicable`**: The query's concept has no inherent contextual boundary.\n    * **Example:** \"What is the element with the atomic number of 1?\"\n\nFor each dimension, analyze the query, classify it, and provide a confidence score between 0 and 1 (with 1 being absolutely certain). Indicate lower confidence if the query is borderline or if multiple interpretations are plausible.\n"
+            },
+            {
+                "role": "user",
+                "content": "Query: {query}"
+            }
+        ]
+    },
+    "common_request": {
+        "model": "gpt-5-2025-08-07",
+        "tools": null,
+        "top_p": null,
+        "parallel_tool_calls": null,
+        "prompt_cache_key": "sufficient_procedural_specification_v2",
+        "safety_identifier": null,
+        "service_tier": null,
+        "store": null,
+        "temperature": null,
+        "tool_choice": null,
+        "top_logprobs": null,
+        "conversation": null,
+        "include": null,
+        "input": null,
+        "instructions": null,
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "previous_response_id": null,
+        "prompt": null,
+        "reasoning": null,
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "ProceduralSpecification",
+                "schema": {
+                    "$defs": {
+                        "ConfigurationSpecification": {
+                            "properties": {
+                                "analysis": {
+                                    "description": "A brief analysis of the configuration specification.",
+                                    "title": "Analysis",
+                                    "type": "string"
+                                },
+                                "classification": {
+                                    "description": "Classification of the query's analytical parameters (e.g., calculations, ranking metrics).",
+                                    "enum": [
+                                        "Specified",
+                                        "Underspecified",
+                                        "Not Applicable"
+                                    ],
+                                    "title": "Classification",
+                                    "type": "string"
+                                },
+                                "confidence": {
+                                    "description": "Confidence level of the classification.",
+                                    "maximum": 1,
+                                    "minimum": 0,
+                                    "title": "Confidence",
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "analysis",
+                                "classification",
+                                "confidence"
+                            ],
+                            "title": "ConfigurationSpecification",
+                            "type": "object",
+                            "additionalProperties": false
+                        },
+                        "OperationSpecification": {
+                            "properties": {
+                                "analysis": {
+                                    "description": "A brief analysis of the operation specification.",
+                                    "title": "Analysis",
+                                    "type": "string"
+                                },
+                                "classification": {
+                                    "description": "Classification of the query's overall analytical action.",
+                                    "enum": [
+                                        "Specified",
+                                        "Underspecified"
+                                    ],
+                                    "title": "Classification",
+                                    "type": "string"
+                                },
+                                "confidence": {
+                                    "description": "Confidence level of the classification.",
+                                    "maximum": 1,
+                                    "minimum": 0,
+                                    "title": "Confidence",
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "analysis",
+                                "classification",
+                                "confidence"
+                            ],
+                            "title": "OperationSpecification",
+                            "type": "object",
+                            "additionalProperties": false
+                        }
+                    },
+                    "properties": {
+                        "operation_specification": {
+                            "$ref": "#/$defs/OperationSpecification"
+                        },
+                        "configuration_specification": {
+                            "$ref": "#/$defs/ConfigurationSpecification"
+                        }
+                    },
+                    "required": [
+                        "operation_specification",
+                        "configuration_specification"
+                    ],
+                    "title": "ProceduralSpecification",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "strict": true
+            }
+        },
+        "truncation": null
+    }
+}

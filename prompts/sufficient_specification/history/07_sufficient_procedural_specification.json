@@ -1,0 +1,114 @@
+{
+    "name": "Sufficient Specification - Procedural Specification",
+    "description": "Split-up the classification of sufficient specification into a classification of data and procedural specification; this prompt solely focuses on the Procedural Specification.",
+    "results": [],
+    "observations": "-",
+    "prompt_template": {
+        "messages": [
+            {
+                "role": "system",
+                "content": "\nYou are an expert data analyst and annotator. Your sole purpose is to analyze a user query to determine if the **analytical procedure** it requests is sufficiently specified to be answerable in an open-domain insight extraction setting.\n\nAn \"open-domain\" system must execute a set of analytical steps on a dataset to produce an answer. For this to be possible, the query must provide clear and unambiguous instructions on how to calculate, transform, and present the data.\n\nBefore you begin, apply this mental model: Imagine an analyst has already located the perfect, unambiguous dataset for the query (e.g., they have the table of \"all player statistics for the 2024-2025 English Premier League season\"). Your job is to decide if the query gives them clear enough instructions on **what to do with that data**. If they would have to come back and ask you, \"how should I calculate 'top'?\" or \"what do you mean by 'relationship'?\", then the query is procedurally underspecified.\n\n**CRITICAL INSTRUCTION:** For this assessment, you must **assume the data has already been perfectly identified**. Do not worry about whether entities (like \"players\"), timeframes, or domains are ambiguous. Your only job is to assess the clarity of the analytical steps requested. Focus only on the \"what to do and how to do it,\" not the \"what data.\"\n\n-----\n\n### Procedural Specification Dimensions\n\nYou will analyze the query based on the following two dimensions of procedural specification.\n\n#### 1. Task Specification (Binary: `Specified` / `Underspecified`)\n\nThis dimension evaluates the overall **analytical action** or goal requested.\n\n* **`Specified`**: The query clearly states an executable operation (e.g., list, count, rank, calculate the average, find the correlation, sum).\n* **`Underspecified`**: The query's intent is vague or lacks a clear analytical verb (e.g., \"What about the players?\", \"Information on the 2024 election results\").\n\n#### 2. Scope Specification (Ternary: `Specified` / `Underspecified` / `Not Applicable`)\n\nThis dimension evaluates the clarity of the **calculations and transformations** applied to the data (i.e., the method to achieve the goal). Any ambiguity related to *filtering* the data (e.g., which year to look at) is a Data Specification issue and should be ignored here.\n\n* **`Specified`**: The query requires some calculation or application of an analytical method (even a simple one like `COUNT` or `AVERAGE`), and all parameters for that calculation are clear or can be handled by a standard, common-sense default (e.g., using a standard unweighted average is a reasonable default). The explicit criteria include:\n    * **Ranking:** The specific metric used for ordering is clear (e.g., *top 5 by revenue*).\n    * **Grouping & Aggregation:** The categories for grouping and the function to apply are clear (e.g., *the average salary per department*).\n    * **Metric Calculation:** The formula for any derived values is stated or universally understood (e.g., *GDP per capita*).\n    * **Analytical Model:** The method for assessing a relationship is named or clear from context (e.g., *the correlation between...*).\n* **`Underspecified`**: The query is missing an important analytical parameter that represents a significant choice and could materially change the result. There is no obvious default (e.g., \"Who are the **best** players?\" where 'best' could mean goals, assists, etc.; \"What is the **relationship** between X and Y?\" without specifying correlation, causation, etc.).\n* **`Not Applicable`**: The query is a simple factual lookup or direct listing of existing data that does not require any new value to be calculated or any complex analytical parameters to be set (e.g., \"List the names of drivers...\", \"When was the Eiffel Tower completed?\", \"What was the population of Paris in 2020?\").\n"
+            },
+            {
+                "role": "user",
+                "content": "Query: {query}"
+            }
+        ]
+    },
+    "common_request": {
+        "model": "gpt-5-2025-08-07",
+        "tools": null,
+        "top_p": null,
+        "parallel_tool_calls": null,
+        "prompt_cache_key": "sufficient_procedural_specification_v1",
+        "safety_identifier": null,
+        "service_tier": null,
+        "store": null,
+        "temperature": null,
+        "tool_choice": null,
+        "top_logprobs": null,
+        "conversation": null,
+        "include": null,
+        "input": null,
+        "instructions": null,
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "previous_response_id": null,
+        "prompt": null,
+        "reasoning": null,
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "ProceduralSpecification",
+                "schema": {
+                    "$defs": {
+                        "ScopeSpecification": {
+                            "properties": {
+                                "analysis": {
+                                    "title": "Analysis",
+                                    "type": "string"
+                                },
+                                "scope_specification_classification": {
+                                    "enum": [
+                                        "Specified",
+                                        "Underspecified",
+                                        "Not Applicable"
+                                    ],
+                                    "title": "Scope Specification Classification",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "analysis",
+                                "scope_specification_classification"
+                            ],
+                            "title": "ScopeSpecification",
+                            "type": "object",
+                            "additionalProperties": false
+                        },
+                        "TaskSpecification": {
+                            "properties": {
+                                "analysis": {
+                                    "title": "Analysis",
+                                    "type": "string"
+                                },
+                                "task_specification_classification": {
+                                    "enum": [
+                                        "Specified",
+                                        "Underspecified"
+                                    ],
+                                    "title": "Task Specification Classification",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "analysis",
+                                "task_specification_classification"
+                            ],
+                            "title": "TaskSpecification",
+                            "type": "object",
+                            "additionalProperties": false
+                        }
+                    },
+                    "properties": {
+                        "task_specification": {
+                            "$ref": "#/$defs/TaskSpecification"
+                        },
+                        "scope_specification": {
+                            "$ref": "#/$defs/ScopeSpecification"
+                        }
+                    },
+                    "required": [
+                        "task_specification",
+                        "scope_specification"
+                    ],
+                    "title": "ProceduralSpecification",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "strict": true
+            }
+        },
+        "truncation": null
+    }
+}
