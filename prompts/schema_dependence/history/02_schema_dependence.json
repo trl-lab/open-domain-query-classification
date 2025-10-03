@@ -1,0 +1,82 @@
+{
+    "name": "Schema Dependence - Fine-grained",
+    "description": "Splitting the categorization into three sub-dimensions, making the definition a lot more specific.",
+    "results": [],
+    "observations": "Start improvement; also allows for better human labels and more accurate assessment.",
+    "prompt_template": {
+        "messages": [
+            {
+                "role": "system",
+                "content": "\nYou are an expert data analyst specializing in human-computer interaction and natural language interfaces for databases. Your task is to analyze a user query and determine if it is schema-dependent.\n\nA query is schema-dependent if its phrasing suggests the user already has knowledge of the underlying data's specific structure, content, or format. In a true open-domain setting, a user would ask a natural, conceptual question about the world, not a question crafted around specific datasets they have already seen.\n\nYou will classify each query along three dimensions of schema-dependence. For each query, you must provide your reasoning in an analysis field and then set boolean flags for each dimension.\n\nClassification Dimensions\n\n- Structural Reference (structure_reference: bool):\n    - Set to true if: The query uses terminology that is unnaturally specific or technical, strongly suggesting it was copied or adapted from a table's column or header names. This is not limited to explicit code-like identifiers (e.g., snake_case or camelCase). It includes any language that a typical user, unaware of the schema, would be unlikely to use.\n    - Example of subtle reference: A query asking for the \"event message type\" instead of \"what kind of event happened?\".\n    - Example of explicit reference: A query asking for the mean of the \"EVENTTIME\" column.\n\n- Value Reference (value_reference: bool):\n    - Set to true if: The query contains specific values, codes, or internal identifiers that are not common public knowledge. The presence of such a value implies the user has already seen the data's content.\n    - Distinction is key: A common-knowledge entity like \"France\" or \"Taylor Swift\" is not a value reference. An internal identifier like \"Order ID 2398\" or \"employee code E10297\" is a value reference.\n    - Example: \"What is the status of the transaction with transaction_id 'TXN-9B4C-2A8E'?\"\n\n- Container Reference (container_reference: bool):\n    - Set to true if: The query explicitly refers to the data artifact itself. This breaks the illusion of a natural open-domain interaction by turning it into a direct instruction about a file.\n    - Keywords to look for: \"dataset\", \"table\", \"file\", \"data\", \"spreadsheet\", etc.\n    - Example: \"Using the provided dataset, find the top five most frequent qualifications.\"\n"
+            },
+            {
+                "role": "user",
+                "content": "Query: {query}"
+            }
+        ]
+    },
+    "common_request": {
+        "model": "gpt-5-mini-2025-08-07",
+        "tools": null,
+        "top_p": null,
+        "parallel_tool_calls": null,
+        "prompt_cache_key": "schema_dependence_v2",
+        "safety_identifier": null,
+        "service_tier": null,
+        "store": null,
+        "temperature": null,
+        "tool_choice": null,
+        "top_logprobs": null,
+        "conversation": null,
+        "include": null,
+        "input": null,
+        "instructions": null,
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "previous_response_id": null,
+        "prompt": null,
+        "reasoning": null,
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "SchemaDependenceClassification",
+                "schema": {
+                    "properties": {
+                        "analysis": {
+                            "title": "Analysis",
+                            "type": "string"
+                        },
+                        "structure_reference": {
+                            "title": "Structure Reference",
+                            "type": "boolean"
+                        },
+                        "value_reference": {
+                            "enum": [
+                                "True",
+                                "Obscure",
+                                "False"
+                            ],
+                            "title": "Value Reference",
+                            "type": "string"
+                        },
+                        "container_reference": {
+                            "title": "Container Reference",
+                            "type": "boolean"
+                        }
+                    },
+                    "required": [
+                        "analysis",
+                        "structure_reference",
+                        "value_reference",
+                        "container_reference"
+                    ],
+                    "title": "SchemaDependenceClassification",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "strict": true
+            }
+        },
+        "truncation": null
+    }
+}
