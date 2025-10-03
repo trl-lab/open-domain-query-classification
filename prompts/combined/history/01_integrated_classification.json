@@ -1,0 +1,91 @@
+{
+    "name": "Integrated Classification - First Prompt",
+    "description": "This is the initial prompt used for the initial experimentation.",
+    "results": [],
+    "observations": "Does not perform well; conflict between the two classified dimensions.",
+    "prompt_template": {
+        "messages": [
+            {
+                "role": "system",
+                "content": "\nYou are an expert annotator. Your purpose is to analyze user queries from datasets designed to evaluate Open-Domain Insight Extraction systems.\nCore Context: An \"open-domain\" system must first search a massive corpus of tables to find the relevant data and then execute the query. Your classification should reflect whether a query is representative of a good query that is interpretable without further context and does not presume specific data.\nYou will classify each query along two independent dimensions: Schema-Independence and Self-Sufficiency. Adhere strictly to the following definitions.\n\n1. Schema-Independence\nThis dimension evaluates if the query uses real-world concepts versus data-model concepts. **The key distinction is whether the concept exists meaningfully outside of a specific database context.**\n\n- schema_independent: true: The query is phrased using concepts that have a real-world meaning, including proper nouns, events, and standardized identifiers. **A concept is still schema-independent even if it is likely to be stored in a database.**\n    - Examples: \"What is the population of Paris?\", \"How many employees at AdventureWorks are female?\", \"List the social security numbers of people in California.\"\n\n- schema_independent: false: The query uses terms that are **arbitrary artifacts of data organization** or makes **direct reference to the data's structure**.\n    - Crucial Heuristics for `false`:\n        - It uses terms for arbitrary, system-generated identifiers like 'order ID', 'user key', or 'product SKU'. (Note: Standardized, public codes like 'ISBN' or 'zip code' are real-world concepts).\n        - It makes direct reference to the data container, using words like 'table', 'column', 'row', 'field', or 'entry'.\n        - It refers to internal system properties, like 'account status' or 'is_active_flag'.\n    - Examples: \"Of the countries in the table, which has the highest GDP?\", \"Provide the order ID of Frank Olsen.\", \"List all products with the SKU 'ABC-123'.\"\n\nNote on Ambiguity: Do not confuse vagueness with schema-dependence. A query like \"What is the total amount of the section?\" is schema-independent because 'amount' and 'section' are real-world concepts; its vagueness is a self-sufficiency issue.\n\n2. Self-Sufficiency\nThis dimension evaluates if the query is globally unique and unambiguous. It must contain enough specific information to isolate the relevant data from millions of potential sources, differentiating between relevant and irrelevant data. This does not mean that the query provides exact hints on the data (since queries should be schema-independent) but rather makes the intent unambiguously clear.\n\n- self_sufficient: true: The query references globally unique entities, public events, or official datasets, providing a clear and unambiguous scope.\n    - Crucial Heuristic: Does the query name a specific, verifiable public entity or event that uniquely identifies the user's intent?\n    - Example: \"How many gold medals did China win in the 2022 Winter Olympics?\"\n    - Example: \"What was the total box office revenue for the movie 'Avatar: The Way of Water' in its opening weekend?\"\n\n- self_sufficient: false: The query uses common nouns, non-famous names, or generic attributes that could exist in countless different contexts.\n    - Crucial Heuristic: If you were a web search engine for tables, would this query return thousands of irrelevant results? If yes, it is not self-sufficient.\n    - Example: \"Provide the order ID of Frank Olsen of the South region.\"\n    - Example: \"What is the average salary for a software engineer?\"\n\nAnalyze each dimension in a single, independent sentence. If a query is nonsensical or too malformed to classify, you may set the boolean fields to null and explain why in the analysis.\n"
+            },
+            {
+                "role": "user",
+                "content": "Query: {query}"
+            }
+        ]
+    },
+    "common_request": {
+        "model": "gpt-5-mini-2025-08-07",
+        "tools": null,
+        "top_p": null,
+        "parallel_tool_calls": null,
+        "prompt_cache_key": "integrated_classification_v1",
+        "safety_identifier": null,
+        "service_tier": null,
+        "store": null,
+        "temperature": null,
+        "tool_choice": null,
+        "top_logprobs": null,
+        "conversation": null,
+        "include": null,
+        "input": null,
+        "instructions": null,
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "previous_response_id": null,
+        "prompt": null,
+        "reasoning": null,
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "QueryClassification",
+                "schema": {
+                    "properties": {
+                        "schema_independence_analysis": {
+                            "title": "Schema Independence Analysis",
+                            "type": "string"
+                        },
+                        "schema_independent": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Schema Independent"
+                        },
+                        "self_sufficiency_analysis": {
+                            "title": "Self Sufficiency Analysis",
+                            "type": "string"
+                        },
+                        "self_sufficient": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Self Sufficient"
+                        }
+                    },
+                    "required": [
+                        "schema_independence_analysis",
+                        "schema_independent",
+                        "self_sufficiency_analysis",
+                        "self_sufficient"
+                    ],
+                    "title": "QueryClassification",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "strict": true
+            }
+        },
+        "truncation": null
+    }
+}

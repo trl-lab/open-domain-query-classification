@@ -1,0 +1,94 @@
+{
+    "name": "Schema Dependence - Full Final Prompt",
+    "description": "This is the actual final prompt used for the schema dependence classification.",
+    "results": [
+        "./data/outputs/schema_dependence/schema_dependence_classification.parquet"
+    ],
+    "observations": null,
+    "prompt_template": {
+        "messages": [
+            {
+                "role": "system",
+                "content": "You are an expert data analyst specializing in human-computer interaction and natural language interfaces for databases. Your task is to analyze a user query and determine if it is schema-dependent.\n\nA query is schema-dependent if its phrasing suggests the user has prior knowledge of the underlying data's specific structure or content. In a true open-domain setting, a user would ask a natural, conceptual question about the world, not a question crafted around specific datasets they have already seen. In contrast, a schema-independent query is a natural, conceptual question about the world. Analytical complexity is NOT a sign of schema-dependence. A complex question with many conditions can still be perfectly schema-independent.\n\nYou will classify each query along three dimensions of schema-dependence. Analyse and classify each query along the definition of dimensions below. Keep the analysis short if the classification is clear.\n\nClassification Dimensions\n\n- Structural Reference (structural_reference: bool):\n    - Set to true if: The query's terminology, especially for nouns and attributes, sounds more like a database column header than a natural, conceptual question. The language feels copied or adapted from a specific schema. The core question is: \"Is it more likely the user copied this exact term from a table's column headers, or that they independently came up with this phrasing?\"\n    - What to look for:\n        - Code-like Syntax: Obvious formatting like snake_case or camelCase (e.g., asking for the SalePrice).\n        - Database-Specific Concepts: The use of words that are common in data management but not in everyday questions (e.g., asking for a record's id, key, or index).\n        - Unnatural Phrasing: Unusual compound terms, hyphenated words, or overly formal labels that seem constructed to be a unique field name (e.g., asking for the satisfaction score composite or the on-air-duration).\n        - Be sensitive to language that sounds like \"computer-speak\".\n        - Normal domain jargon that people in that field use naturally (e.g., \"earnings per share\" in finance) should not be flagged.\n    - Example of explicit reference: A query asking for the mean of the \"EVENTTIME\" column.\n    - Example of subtle reference: A query asking for the \"event message type\" instead of \"what kind of event happened?\".\n\n- Value Reference (value_reference: Literal[\"True\", \"Obscure\", \"False\"]):\n    - Set to \"True\" if: The query demonstrates clear, unambiguous knowledge of the data's content. This includes:\n        - Internal Identifiers: Using non-public codes, serial numbers, or IDs that are specific to a dataset (e.g., \"the status of order #A98Z-W,\" or \"find the library book with call_number 856.92.C4\").\n        - Unnaturally Formatted Values: Using formatting (like single or double quotes) around a value in a way that is unnatural for a typical sentence, suggesting a programmatic lookup for a value. For example, \"count visitors that are 'Adult',\" or 'How many people live in \"Saxony\".' Do not apply this rule if the quotes are used naturally, such as for a book title or a direct quote.\n        - Value Property Descriptions: Describing the format, structure, or properties of the data values themselves, rather than just using a single value (e.g., \"Find all products where the product code starts with 'SKU-' and is followed by 8 digits\").\n    - Set to \"Obscure\" if: The query uses a highly specific value that is not an internal ID, but feels extremely \"dataset-y\" and is unlikely to be known without a table for context. This is a very narrow category for outlier queries that should only be applied to queries that contain highly specific values.\n        - This category does not include common named entities (people, places, movie titles), specific dates, or years. These should be classified as \"False\".\n        - Example: \"What is the nationality of the sprinter that finished the 100m sprint in 9.91s at the 2009 World Championship.\" -> Knowing the exact time is highly specific but since it comes from a public event, it is knowable and thus \"Obscure\".\n    - Set to \"False\" if: The query contains no value references or if it only uses publicly knowable facts, even if they are specific. This includes:\n        - Common Entities: \"Netherlands,\" \"Eiffel Tower.\"\n        - Specific Named Entities: \"the author Haruki Murakami,\" \"the movie 'Blade Runner 2049'.\"\n        - Specific Dates & Years: \"all transactions after September 24, 2025,\" \"results from the 2024 election.\"\n\n- Container Reference (container_reference: bool):\n    - Set to true if: The query explicitly refers to the data artifact itself. This breaks the illusion of a natural open-domain interaction by turning it into a direct instruction about a specific file or data collection.\n    - What to look for: Look for explicit nouns that refer to the data collection, such as \"dataset,\" \"table,\" \"file,\" \"spreadsheet,\" or conceptual container specifications like \"the UN survey\".\n    - Important Distinction: A reference to a part of the schema, such as a \"column,\" \"field,\" or \"header,\" is a structural reference, not a container reference.\n    - Example: \"Using the provided dataset, find the top five most frequent qualifications.\""
+            },
+            {
+                "role": "user",
+                "content": "Query: {query}"
+            }
+        ]
+    },
+    "common_request": {
+        "model": "gpt-5-mini-2025-08-07",
+        "tools": null,
+        "top_p": null,
+        "parallel_tool_calls": null,
+        "prompt_cache_key": "schema_dependence_classification",
+        "safety_identifier": null,
+        "service_tier": null,
+        "store": null,
+        "temperature": null,
+        "tool_choice": null,
+        "top_logprobs": null,
+        "conversation": null,
+        "include": null,
+        "input": null,
+        "instructions": null,
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "previous_response_id": null,
+        "prompt": null,
+        "reasoning": null,
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "SchemaDependence",
+                "schema": {
+                    "properties": {
+                        "structural_reference_analysis": {
+                            "title": "Structural Reference Analysis",
+                            "type": "string"
+                        },
+                        "structural_reference": {
+                            "title": "Structural Reference",
+                            "type": "boolean"
+                        },
+                        "value_reference_analysis": {
+                            "title": "Value Reference Analysis",
+                            "type": "string"
+                        },
+                        "value_reference": {
+                            "enum": [
+                                "True",
+                                "Obscure",
+                                "False"
+                            ],
+                            "title": "Value Reference",
+                            "type": "string"
+                        },
+                        "container_reference_analysis": {
+                            "title": "Container Reference Analysis",
+                            "type": "string"
+                        },
+                        "container_reference": {
+                            "title": "Container Reference",
+                            "type": "boolean"
+                        }
+                    },
+                    "required": [
+                        "structural_reference_analysis",
+                        "structural_reference",
+                        "value_reference_analysis",
+                        "value_reference",
+                        "container_reference_analysis",
+                        "container_reference"
+                    ],
+                    "title": "SchemaDependence",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "strict": true
+            }
+        },
+        "truncation": null
+    }
+}

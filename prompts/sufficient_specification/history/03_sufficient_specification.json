@@ -1,0 +1,199 @@
+{
+    "name": "Sufficient Specification - Fine-grained v2",
+    "description": "Making the prompt more explicit and adding examples to improve over v1.",
+    "results": [],
+    "observations": "Slight improvements across dimensions.",
+    "prompt_template": {
+        "messages": [
+            {
+                "role": "system",
+                "content": "\nYou are an expert data analyst and annotator. Your purpose is to meticulously analyze a user query to determine if it is sufficiently specified to be answerable in an open-domain insight extraction setting.\n\nAn \"open-domain insight extraction\" system must identify relevant data from a massive, unknown corpus of tables before executing a query. For this to be possible, the query must be self-contained and unambiguous, providing enough detail to pinpoint the correct data and the correct analytical operation without needing to ask for clarification.\n\nCore Principle:\nBefore you begin, apply this mental model: Imagine you must give the query to a researcher who has access to every table in the world but cannot ask you any clarifying questions. If they can find the data and provide an answer fully addresses the users intend, the query is sufficiently specified. If they would need to ask \"Which one?\", \"When?\", \"Where?\", or \"What do you mean by 'best'?\", the query is underspecified in one or more dimensions.\n\n\nClassification Dimensions:\n\nYou will analyze and classify the query along five distinct dimensions. You briefly analyze the query along each dimension independently and provide a classification.\n\n1. Task Specification (Binary: \"Specified\" / \"Underspecified\")\n\nThis dimension evaluates the analytical action requested. Is the verb or instruction clear and executable?\n\n- Specified: The query clearly states an analytical operation (e.g., list, count, rank, calculate the average, find the correlation, compare).\n- Underspecified: The query's intent is vague (e.g., \"tell me about\", \"what about\", \"information on\").\n\n\n2. Scope Specification (Ternary: \"Specified\" / \"Underspecified\" / \"Not Applicable\")\n\nThis dimension evaluates the clarity of the analytical parameters required to derive the insight. It covers the methodology of the analysis. A specified scope is explicit about criteria such as:\n\n- Filtering: Conditions for including or excluding data.\n- Ranking: The specific metric used for ordering.\n- Grouping & Aggregation: The categories for grouping and the function to apply (e.g., COUNT, SUM, AVG).\n- Metric Calculation: The formula for any derived values (e.g., GDP per capita).\n- Analytical Model: The method for assessing a relationship (e.g., correlation).\n\nScope Classification:\n- Specified: The query is unambiguous about all necessary analytical parameters.\n    - Example: \"What is the average salary per department for employees hired after 2022?\"\n    - Example: \"Rank the top 5 countries by GDP per capita.\"\n\n- Underspecified: The query is missing one or more key analytical parameters, requiring the system to make a significant assumption about the methodology.\n    - Example: \"Show me the employee breakdown by department.\" (The aggregation method is underspecified: a list, a count, or an average salary?).\n    - Example: \"What is the relationship between GINI and HDI?\" (The analytical model is underspecified: correlation, regression, or a simple comparison?).\n\n- Not Applicable: The query is a simple, direct factual lookup that does not require complex analytical parameters.\n    - Example: \"What is the official currency of Japan?\"\n\n\n3. Entity Specification (Binary: \"Specified\" / \"Underspecified\")\n\nThis dimension evaluates the core subjects (nouns) of the query. Are the people, places, things, or concepts specific enough to be uniquely identified?\n\n- Specified: The entities are named in full or are otherwise unambiguous (e.g., \"the 2024 Tour de France\", \"GDP of Brazil\", \"Michael Phelps\").\n- Underspecified: The entities are generic, incomplete, or could refer to multiple different things (e.g., \"the recent race\", \"GDP\", \"Michael\").\n\n\n4. Temporal Specification (Quaternary: \"Specified\" / \"Underspecified (Assuming Recency)\" / \"Underspecified (Ambiguous)\" / \"Not Applicable\")\n\nThis dimension evaluates the time frame of the query, distinguishing between explicit instructions, probable intent, and true ambiguity.\n\n- Specified: The query provides a clear and unambiguous time frame. This can be explicit (e.g., \"in 2023\", \"on June 5th\") or implicitly resolvable (e.g., \"in the most recent election\", \"last year's financial results\").\n- Underspecified (Assuming Recency): The query concerns a time-sensitive fact and lacks an explicit time frame, but the most probable user intent is to request the most recent available data. This is the default assumption for many statistical queries.\n    - Example: \"What is the unemployment rate in Spain?\" - The clear intent is for the latest reported figure.\n    - Example: \"How many countries have a GINI index greater than 0.4?\" - This implies using the most recent GINI index data for each country.\n\n- Underspecified (Ambiguous): The query is time-sensitive, lacks a time frame, and the intent is truly ambiguous. There is no single, safe \"most recent\" default assumption. The query could be asking for a value at a specific point in time, a historical trend, or an aggregate value over time.\n    - Example: \"What was the stock price of Apple?\" - This could mean today, last year, or at its IPO. Clarification is required.\n    - Example: \"How many wins did the Lakers have?\" - This is ambiguous between a specific season and their entire history.\n\n- Not Applicable: The query concerns an atemporal, definitional fact where time is irrelevant.\n    - Example: \"What share does hydrogen have in the mass of the earth?\"\n\n\n5. Locational Specification (Quaternary: \"Specified\" / \"Underspecified (Assuming Global)\" / \"Underspecified (Ambiguous)\" / \"Not Applicable\")\n\nThis dimension evaluates the locational or domain-specific context. It distinguishes between queries with explicit boundaries, those with a probable global scope, and those that are truly ambiguous.\n\n- Specified: The query defines a locational or organizational boundary that is globally unique or provides a complete, self-contained hierarchy.\n    - Example: \"What is the tallest building in Dubai?\"\n    - Example: \"List all employees in the marketing department of Apple Inc.\"\n\n- Underspecified (Assuming Global): The query lacks a locational boundary, but the most probable and logical user intent is to apply a global scope (\"in the world\").\n    - Example: \"What is the highest mountain?\" - This implicitly means \"in the world\".\n    - Example: \"List all countries with a GDP over $20 trillion.\" - The context is inherently global.\n\n- Underspecified (Ambiguous): The query lacks a locational boundary, and there is no logical global default. The context is truly missing and must be provided for the query to be answerable.\n    - Example: \"What is the regional capital with the highest population?\" - Requires a country; \"global\" is not a valid scope.\n    - Example: \"List the highest-paid employees.\" - Requires a company or organization.\n\n- Not Applicable: The query's concept is abstract and has no inherent locational or domain-specific boundary.\n    - Example: \"What is the speed of light in a vacuum?\"\n"
+            },
+            {
+                "role": "user",
+                "content": "Query: {query}"
+            }
+        ]
+    },
+    "common_request": {
+        "model": "gpt-5-2025-08-07",
+        "tools": null,
+        "top_p": null,
+        "parallel_tool_calls": null,
+        "prompt_cache_key": "sufficient_specification_v3",
+        "safety_identifier": null,
+        "service_tier": null,
+        "store": null,
+        "temperature": null,
+        "tool_choice": null,
+        "top_logprobs": null,
+        "conversation": null,
+        "include": null,
+        "input": null,
+        "instructions": null,
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "previous_response_id": null,
+        "prompt": null,
+        "reasoning": null,
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "QuerySpecificationClassification",
+                "schema": {
+                    "$defs": {
+                        "EntitySpecification": {
+                            "properties": {
+                                "analysis": {
+                                    "title": "Analysis",
+                                    "type": "string"
+                                },
+                                "entity_specification_classification": {
+                                    "enum": [
+                                        "Specified",
+                                        "Underspecified"
+                                    ],
+                                    "title": "Entity Specification Classification",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "analysis",
+                                "entity_specification_classification"
+                            ],
+                            "title": "EntitySpecification",
+                            "type": "object",
+                            "additionalProperties": false
+                        },
+                        "LocationalSpecification": {
+                            "properties": {
+                                "analysis": {
+                                    "title": "Analysis",
+                                    "type": "string"
+                                },
+                                "locational_specification_classification": {
+                                    "enum": [
+                                        "Specified",
+                                        "Underspecified (Assuming Global)",
+                                        "Underspecified (Ambiguous)",
+                                        "Not Applicable"
+                                    ],
+                                    "title": "Locational Specification Classification",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "analysis",
+                                "locational_specification_classification"
+                            ],
+                            "title": "LocationalSpecification",
+                            "type": "object",
+                            "additionalProperties": false
+                        },
+                        "ScopeSpecification": {
+                            "properties": {
+                                "analysis": {
+                                    "title": "Analysis",
+                                    "type": "string"
+                                },
+                                "scope_specification_classification": {
+                                    "enum": [
+                                        "Specified",
+                                        "Underspecified",
+                                        "Not Applicable"
+                                    ],
+                                    "title": "Scope Specification Classification",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "analysis",
+                                "scope_specification_classification"
+                            ],
+                            "title": "ScopeSpecification",
+                            "type": "object",
+                            "additionalProperties": false
+                        },
+                        "TaskSpecification": {
+                            "properties": {
+                                "analysis": {
+                                    "title": "Analysis",
+                                    "type": "string"
+                                },
+                                "task_specification_classification": {
+                                    "enum": [
+                                        "Specified",
+                                        "Underspecified"
+                                    ],
+                                    "title": "Task Specification Classification",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "analysis",
+                                "task_specification_classification"
+                            ],
+                            "title": "TaskSpecification",
+                            "type": "object",
+                            "additionalProperties": false
+                        },
+                        "TemporalSpecification": {
+                            "properties": {
+                                "analysis": {
+                                    "title": "Analysis",
+                                    "type": "string"
+                                },
+                                "temporal_specification_classification": {
+                                    "enum": [
+                                        "Specified",
+                                        "Underspecified (Assuming Recency)",
+                                        "Underspecified (Ambiguous)",
+                                        "Not Applicable"
+                                    ],
+                                    "title": "Temporal Specification Classification",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "analysis",
+                                "temporal_specification_classification"
+                            ],
+                            "title": "TemporalSpecification",
+                            "type": "object",
+                            "additionalProperties": false
+                        }
+                    },
+                    "properties": {
+                        "task_specification": {
+                            "$ref": "#/$defs/TaskSpecification"
+                        },
+                        "entity_specification": {
+                            "$ref": "#/$defs/EntitySpecification"
+                        },
+                        "temporal_specification": {
+                            "$ref": "#/$defs/TemporalSpecification"
+                        },
+                        "locational_specification": {
+                            "$ref": "#/$defs/LocationalSpecification"
+                        },
+                        "scope_specification": {
+                            "$ref": "#/$defs/ScopeSpecification"
+                        }
+                    },
+                    "required": [
+                        "task_specification",
+                        "entity_specification",
+                        "temporal_specification",
+                        "locational_specification",
+                        "scope_specification"
+                    ],
+                    "title": "QuerySpecificationClassification",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "strict": true
+            }
+        },
+        "truncation": null
+    }
+}

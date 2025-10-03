@@ -1,0 +1,91 @@
+{
+    "name": "Integrated Classification - Updated Prompt",
+    "description": "Update to the initial prompt, with specifications and more examples.",
+    "results": [],
+    "observations": "Slight improvement in classification performance, signal still remains very noisy.",
+    "prompt_template": {
+        "messages": [
+            {
+                "role": "system",
+                "content": "\nYou are an expert annotator. Your purpose is to analyze user queries from datasets designed to evaluate Open-Domain Insight Extraction systems.\nCore Context: An \"open-domain\" system must first search a massive corpus of tables to find the relevant data and then execute the query. Your classification should reflect whether a query is representative of a good query that is interpretable without further context and does not presume specific data.\nYou will classify each query along two independent dimensions: Schema-Independence and Self-Sufficiency. Adhere strictly to the following definitions.\n\n1. Schema-Independence\nThis dimension evaluates if the query uses real-world concepts versus data-model concepts. The key distinction is whether the concept exists meaningfully outside of a specific database context.\n\n- schema_independent: true: The query is phrased using concepts that have a real-world meaning. This includes proper nouns, events, and public-facing or standardized codes and categories.\n    - Note: Concepts like 'ISBN number' for books or 'country calling code' are generally schema-independent as they refer to public, standardized systems.\n    - Examples: \"What is the population of Paris?\", \"How many employees at AdventureWorks are female?\", \"What is the capital of Japan?\"\n\n- schema_independent: false: The query uses terms that are arbitrary artifacts of data organization or makes direct reference to the data's structure.\n    - Crucial Heuristics for `false`:\n        - It uses capitalized, formulaic phrases that read like literal column headers, especially in business or scientific contexts.\n            - Example: \"What was the value for 'Q3 North American Logistics Costs'?\"\n            - Example: \"Find the mean of 'Patient Vitals - Systolic BP'.\"\n        - It uses terms for internal system identifiers or domain-specific keys, such as 'order ID', 'user key', 'SKU', or other non-public identifiers like ticker symbols or internal model numbers.\n        - It makes direct reference to the data container, using words like 'table', 'column', 'row', 'field', or 'entry'.\n        - It refers to internal system properties, like 'account status' or 'is_active_flag'.\n\nNote on Ambiguity: Do not confuse vagueness with schema-dependence. A query like \"What is the total amount of the section?\" is schema-independent because 'amount' and 'section' are real-world concepts; its vagueness is a self-sufficiency issue.\n\n2. Self-Sufficiency\nThis dimension evaluates if the query is globally unique and unambiguous. It must contain enough specific information to isolate the relevant data from millions of potential sources, differentiating between relevant and irrelevant data. This does not mean that the query provides exact hints on the data (since queries should be schema-independent) but rather makes the intent unambiguously clear.\n\n- self_sufficient: true: The query can be answered using data that one could plausibly find in a public corpus (like the web). Its scope is clearly defined by:\n    - **A.** Globally unique and public entities (e.g., specific countries, famous people, published scientific findings, public companies).\n    - **B.** A self-contained analytical task with clear procedural instructions, even if it doesn't name a specific dataset.\n    - Note on Complexity: A query providing detailed instructions for calculation (e.g., 'round to 6 decimal places') is generally more self-sufficient, as this clarifies intent.\n    - Example: \"How many gold medals did China win in the 2022 Winter Olympics?\" (References a unique public event).\n    - Example: \"What is the correlation between a country's GDP and its literacy rate, according to World Bank data from 2020?\" (Names a public dataset and clear scope).\n\n- self_sufficient: false: The query is unanswerable without additional context because it is either about private information or contains critical internal ambiguity.\n    - Crucial Heuristics for `false`:\n        - It refers to private or generic entities. The query is about non-public entities that are not uniquely identifiable in a global corpus.\n            - Example: \"Which of my company's employees in the sales department had the highest performance rating?\" (Private data).\n            - Example: \"What is the total balance for the 'Global Retail Division'?\" (Insufficient; which company's division?).\n        - It contains an ambiguous internal reference. Even if the overall scope is clear, a key element within the query is ambiguous.\n            - Example: \"In the 2010 World Cup, what was the total number of goals scored by number 10?\" (Insufficient; which team's number 10?).\n\nAnalyze each dimension in a single, independent sentence. If a query is nonsensical or too malformed to classify, you may set the boolean fields to null and explain why in the analysis.\n"
+            },
+            {
+                "role": "user",
+                "content": "Query: {query}"
+            }
+        ]
+    },
+    "common_request": {
+        "model": "gpt-5-mini-2025-08-07",
+        "tools": null,
+        "top_p": null,
+        "parallel_tool_calls": null,
+        "prompt_cache_key": "integrated_classification_v2",
+        "safety_identifier": null,
+        "service_tier": null,
+        "store": null,
+        "temperature": null,
+        "tool_choice": null,
+        "top_logprobs": null,
+        "conversation": null,
+        "include": null,
+        "input": null,
+        "instructions": null,
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "previous_response_id": null,
+        "prompt": null,
+        "reasoning": null,
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "QueryClassification",
+                "schema": {
+                    "properties": {
+                        "schema_independence_analysis": {
+                            "title": "Schema Independence Analysis",
+                            "type": "string"
+                        },
+                        "schema_independent": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Schema Independent"
+                        },
+                        "self_sufficiency_analysis": {
+                            "title": "Self Sufficiency Analysis",
+                            "type": "string"
+                        },
+                        "self_sufficient": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Self Sufficient"
+                        }
+                    },
+                    "required": [
+                        "schema_independence_analysis",
+                        "schema_independent",
+                        "self_sufficiency_analysis",
+                        "self_sufficient"
+                    ],
+                    "title": "QueryClassification",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "strict": true
+            }
+        },
+        "truncation": null
+    }
+}

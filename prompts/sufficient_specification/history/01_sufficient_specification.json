@@ -1,0 +1,79 @@
+{
+    "name": "Sufficient Specification - Naive",
+    "description": "Direct classification of sufficient query specification as a whole.",
+    "results": [],
+    "observations": "Small improvement over the integrated prompt; overall still very unreliable.",
+    "prompt_template": {
+        "messages": [
+            {
+                "role": "system",
+                "content": "\nYou are an expert annotator. Your purpose is to analyze a user query to determine if it is **self-sufficient** for an open-domain setting.\nCore Context: An \"open-domain\" system must search a massive corpus of tables to find relevant data. A query is only useful in this context if it is globally unique and unambiguous enough to isolate the correct data from millions of potential sources.\nYou will classify the query based on the following strict definition.\n\n## Self-Sufficiency Definition\nThis dimension evaluates if the query is globally unique and unambiguous. It must contain enough specific information to isolate the relevant data, differentiating it from irrelevant data. This does not mean the query provides exact hints on the data, but rather that its intent is unambiguously clear.\n\n- self_sufficient: true: The query can be answered using data that one could plausibly find in a public corpus (like the web). Its scope is clearly defined by:\n    - **A.** Globally unique and public entities (e.g., specific countries, famous people, published scientific findings, public companies).\n    - **B.** A self-contained analytical task with clear procedural instructions, even if it doesn't name a specific dataset.\n    - Note on Complexity: A query providing detailed instructions for calculation (e.g., 'round to 6 decimal places') is generally more self-sufficient, as this clarifies intent.\n    - Example: \"How many gold medals did China win in the 2022 Winter Olympics?\" (References a unique public event).\n    - Example: \"What is the correlation between a country's GDP and its literacy rate?\" (Names a clear scope).\n\n- self_sufficient: false: The query is unanswerable without additional context because it is either about private information or contains critical internal ambiguity.\n    - Crucial Heuristics for `false`:\n        - It refers to private or generic entities. The query is about non-public entities that are not uniquely identifiable in a global corpus.\n            - Example: \"Which of my company's employees in the sales department had the highest performance rating?\" (Private data).\n            - Example: \"What is the total balance for the 'Global Retail Division'?\" (Insufficient; which company's division?).\n        - It contains an ambiguous internal reference. Even if the overall scope is clear, a key element within the query is ambiguous.\n            - Example: \"In the 2010 World Cup, what was the total number of goals scored by number 10?\" (Insufficient; which team's number 10?).\n\nAnalyze in a single sentence why the query is or is not self-sufficient. If a query is nonsensical or too malformed to classify, you may set the boolean field to null and explain why. Rate your confidence in your classification on a scale from 1 (not confident at all) to 10 (very confident).\n"
+            },
+            {
+                "role": "user",
+                "content": "Query: {query}"
+            }
+        ]
+    },
+    "common_request": {
+        "model": "gpt-5-2025-08-07",
+        "tools": null,
+        "top_p": null,
+        "parallel_tool_calls": null,
+        "prompt_cache_key": "sufficient_specification_v1",
+        "safety_identifier": null,
+        "service_tier": null,
+        "store": null,
+        "temperature": null,
+        "tool_choice": null,
+        "top_logprobs": null,
+        "conversation": null,
+        "include": null,
+        "input": null,
+        "instructions": null,
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "previous_response_id": null,
+        "prompt": null,
+        "reasoning": null,
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "SelfSufficiencyClassification",
+                "schema": {
+                    "properties": {
+                        "analysis": {
+                            "title": "Analysis",
+                            "type": "string"
+                        },
+                        "self_sufficient": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Self Sufficient"
+                        },
+                        "confidence": {
+                            "title": "Confidence",
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "analysis",
+                        "self_sufficient",
+                        "confidence"
+                    ],
+                    "title": "SelfSufficiencyClassification",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "strict": true
+            }
+        },
+        "truncation": null
+    }
+}

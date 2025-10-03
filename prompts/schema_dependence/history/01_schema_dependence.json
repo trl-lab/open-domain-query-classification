@@ -1,0 +1,79 @@
+{
+    "name": "Schema Dependence - Naive",
+    "description": "Splitting the integrated prompt into separate prompts for schema dependence and self-sufficiency; this prompt represents the schema independe part of this.",
+    "results": [],
+    "observations": "Significant improvement over the integrated prompt.",
+    "prompt_template": {
+        "messages": [
+            {
+                "role": "system",
+                "content": "\nYou are an expert annotator. Your purpose is to analyze a user query to determine if it is **schema-independent**.\nCore Context: An \"open-domain\" system must first search a massive corpus of tables to find relevant data. A query is only useful in this context if it does not presume specific knowledge of the underlying data's structure.\nYou will classify the query based on the following strict definition.\n\n## Schema-Independence Definition\nThis dimension evaluates if the query uses real-world concepts versus data-model concepts. The key distinction is whether the concept exists meaningfully outside of a specific database context.\n\n- schema_independent: true: The query is phrased using concepts that have a real-world meaning. This includes proper nouns, events, and public-facing or standardized codes and categories.\n    - Note: Concepts like 'ISBN number' for books or 'country calling code' are generally schema-independent as they refer to public, standardized systems.\n    - Examples: \"What is the population of Paris?\", \"How many employees at InnovendoWorks are female?\", \"What is the capital of Japan?\"\n\n- schema_independent: false: The query uses terms that are arbitrary artifacts of data organization or makes direct reference to the data's structure.\n    - Crucial Heuristics for `false`:\n        - It uses capitalized, formulaic phrases that read like literal column headers.\n            - Example: \"What was the value for 'Q3 North American Logistics Costs'?\"\n            - Example: \"Find the mean of 'Patient Vitals - Systolic BP'.\"\n        - It uses terms for internal system identifiers or domain-specific keys, such as 'order ID', 'user key', 'SKU', or other non-public identifiers like ticker symbols or internal model numbers.\n        - It makes direct reference to the data container, using words like 'table', 'column', 'row', 'field', or 'entry'.\n        - It refers to internal system properties, like 'account status' or 'is_active_flag'.\n\n**Note on Ambiguity:** Do not confuse a query's vagueness with schema-dependence. A query like \"What is the total amount of the section?\" is schema-independent because 'amount' and 'section' are real-world concepts; its vagueness is a self-sufficiency issue that you should ignore for this task.\n\nAnalyze in a single sentence why the query is or is not schema-independent. If a query is nonsensical or too malformed to classify, you may set the boolean field to null and explain why. Rate your confidence in your classification on a scale from 1 (not confident at all) to 10 (very confident).\n"
+            },
+            {
+                "role": "user",
+                "content": "Query: {query}"
+            }
+        ]
+    },
+    "common_request": {
+        "model": "gpt-5-mini-2025-08-07",
+        "tools": null,
+        "top_p": null,
+        "parallel_tool_calls": null,
+        "prompt_cache_key": "schema_dependence_v1",
+        "safety_identifier": null,
+        "service_tier": null,
+        "store": null,
+        "temperature": null,
+        "tool_choice": null,
+        "top_logprobs": null,
+        "conversation": null,
+        "include": null,
+        "input": null,
+        "instructions": null,
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "previous_response_id": null,
+        "prompt": null,
+        "reasoning": null,
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "SchemaIndependenceClassification",
+                "schema": {
+                    "properties": {
+                        "analysis": {
+                            "title": "Analysis",
+                            "type": "string"
+                        },
+                        "schema_independent": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Schema Independent"
+                        },
+                        "confidence": {
+                            "title": "Confidence",
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "analysis",
+                        "schema_independent",
+                        "confidence"
+                    ],
+                    "title": "SchemaIndependenceClassification",
+                    "type": "object",
+                    "additionalProperties": false
+                },
+                "strict": true
+            }
+        },
+        "truncation": null
+    }
+}
