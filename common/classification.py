@@ -28,7 +28,7 @@ def create_batch_file(prompt: Prompt, instances: Iterable[PromptTemplateInputIns
 def start_batch_job(batch_file_path: str) -> Batch:
     client = OpenAI()
     batch_file = client.files.create(file=open(batch_file_path, "rb"), purpose="batch")
-    batch_job = client.batches.create(input_file_id=batch_file.file_id, endpoint="/v1/responses", completion_window="24h")
+    batch_job = client.batches.create(input_file_id=batch_file.id, endpoint="/v1/responses", completion_window="24h")
     return batch_job
 
 
