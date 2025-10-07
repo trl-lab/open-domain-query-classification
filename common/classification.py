@@ -34,7 +34,7 @@ def start_batch_job(batch_file_path: str) -> Batch:
 
 def retrieve_batch_results(batch: Batch, classification_target: type[T]) -> Tuple[List[str], List[T]]:
     client = OpenAI()
-    batch = client.batches.retrieve(batch_id=batch.batch_id)
+    batch = client.batches.retrieve(batch_id=batch.id)
     if batch.output_file_id is None:
         raise RuntimeError("Batch job has not completed yet.")
 
