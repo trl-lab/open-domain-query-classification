@@ -1,0 +1,151 @@
+query,dataset
+How long is the Yelp business No. 15098 opened on Monday?,BIRD
+"For the team which had three different goalies in the 2011 postseason games, how many games did they win in the regular season?",BIRD
+List all movie title rated in April 2020 from user who was a trialist.,BIRD
+"Among products bought by Kathryn Ashe, what is the name of the product with the highest quantity?",BIRD
+List all goalies who played in the year 2005 season and shorter than 72 inches. List all the team names he play for.,BIRD
+How many books were published by Brava in 2006?,BIRD
+How many universities are there in the United States of America?,BIRD
+"In the books published by US publishers, which book has the highest royalty? List these books in the descending order of royalty.",BIRD
+To which e-mail address should I write if I want to contact David Bradley?,BIRD
+Which sales person achieved the highest sales YTD? What is the projected yearly sales quota in 2011 for this person?,BIRD
+How much variation is there in the year established among the members of the Matariki Network of Universities?,CRT-QA
+Did any country have a 100% success rate in their spaceflight launches in 2010? Answer with only 'Yes' or 'No' that is most accurate and nothing else.,CRT-QA
+How many teams had a winning percentage greater than 70% in the 2010-11 rugby bundesliga?,CRT-QA
+What is the correlation between a team's number of conceded goals and their final position in the league in 2001?,CRT-QA
+How many players from the 1976-77 Philadelphia Flyers season were from the same college/junior/club team?,CRT-QA
+Which nation was the most successful in terms of total medal count?,CRT-QA
+"Was Daren Kagasoff nominated in different categories for his work in ""The Secret Life of the American Teenager""? Answer with only 'Yes' or 'No' that is most accurate and nothing else.",CRT-QA
+What is the average number of sets played in the tournament finals when Patricio Cornejo plays?,CRT-QA
+Was there any noticeable difference in points scored for Leyton House by switching from the March 881 chassis to the Leyton House CG901 chassis? Answer with only 'Yes' or 'No' that is most accurate and nothing else.,CRT-QA
+Which teams were the most difficult opponents for the New Jersey Devils during the 2007-08 season? (based on number of wins or losses),CRT-QA
+Analyze which sectors have had the highest average company valuations over the past three years.,DA-Code
+Perform clustering on the dataset blob_dataset.,DA-Code
+"From the top 20 clubs with the highest average overall scores in FIFA 20, identify the club with the best average physicality based on the BMI calculation from the players’ heights and weights.",DA-Code
+Implement the analysis.,DA-Code
+Generate a list of industry groups showing the number of companies and their total carbon footprints for the latest year.,DA-Code
+"Could you please analyze the dataset to calculate the correlations between different features? Determine if the common criticism of ""The World Happiness Report"" having a high focus on GDP and strongly correlated features like family and life expectancy is valid.",DA-Code
+Conduct a two-sided Mann-Whitney U test to assess whether there is a significant difference in the age distribution between the Drug and Placebo groups.,DA-Code
+Develop a model to predict body performance using the provided dataset.,DA-Code
+"Based on the Eurostat dataset, predict the average job satisfaction for each entry in test.",DA-Code
+Perform a chi-square test to assess whether the app category significantly affects the rating distribution.,DA-Code
+"3. Develop a machine learning model to classify the asset or commodity into different price categories (low, medium, high) based on the opening, high, and low prices. The boundaries for the categories are: Low(< 500), Medium(500 - 1000), High(> 1000). What are the accuracy of the model and the top three contributing features to the classification?",DA-Eval
+"Perform feature engineering by creating a new feature called ""experience_score"" that is calculated by multiplying the exper column with the looks column. Then, calculate the Pearson correlation coefficient between the ""experience_score"" feature and the wage column.",DA-Eval
+Is there any correlation between the TOTUSJH and TOTUSJZ columns in the dataset?,DA-Eval
+3. Find the correlation coefficient between the number of photos taken during the trajectories and the total duration spent at each point of interest. Use the Python Pandas library's corr() function for the calculation.,DA-Eval
+Calculate the correlation coefficient between the charges incurred by individuals and the number of children they have.,DA-Eval
+Calculate the mean and standard deviation of the gross domestic product per capita in the year 2007 for all countries in the dataset. Round your answers to 2 decimal places.,DA-Eval
+"Perform comprehensive data preprocessing on the abalone dataset. Handle any missing values and scale the variables (length, diameter, height, whole weight, shucked weight, viscera weight, shell weight) using min-max normalization. Then, perform a distribution analysis to determine if the scaled variables adhere to a normal distribution.",DA-Eval
+"Calculate the correlation coefficient between the ""High"" and ""Low"" columns.",DA-Eval
+"What is the mean value of the ""Value"" column?",DA-Eval
+"Is there a correlation between the ""Value"" column and the ""TIME"" column? If yes, what is the correlation coefficient?",DA-Eval
+Who served as Imperial Foreign Minister of Austria-Hungary from 1851-1922?,FeTaQA
+"What 2011-2013 films are John Guleserian known for, some of which were directed by Drake Doremus?",FeTaQA
+What are the highest peaks of the Slieve Bloom Mountains?,FeTaQA
+When was the game between Reading and Wolverhampton Wanderers scheduled for?,FeTaQA
+What was the turn out of the 2017 New Zealand general elections ?,FeTaQA
+How many of his Screen Actors Guild Award nominations did Jimmy Smits win?,FeTaQA
+How did Blériot do compared to Curtiss in the competition?,FeTaQA
+"In the 2005 Pengkalan Pasir by-election, who were the top two candidates and how many votes did each candidate receive?",FeTaQA
+"In his 7 years with Wigan Athletic, how many goals and appearances did Lee McCulloch achieve?",FeTaQA
+What was the highlight of Walter Rothensies 1919–20 season?,FeTaQA
+who is the biggest loser of the 3rd week with 2.69%.,HiTab
+list all the age/sex groups for which the vitamin d content of the simulated diets did not meet the assessment criteria of less than 10% of simulated diets below the ear.,HiTab
+"what is the percentage of members who were 24 years of age and younger saw, heard, or experienced sexualized or discriminatory behaviour in the past 12 months?",HiTab
+"with hartlepool, how appearances did ritchie humphreys make?",HiTab
+what percentage of boys aged 15 to 17 reported having a strong sense of belonging to their local community?,HiTab
+which club did aron play for in 2015?,HiTab
+how many million dollars did federal budget authority for research and development and r&d plant together total in fy 2016?,HiTab
+what was the number of women-owned enterprises?,HiTab
+"when other factors were taken into account in the multivariate model, what was the predicted probability of being bilingual in english and french in 2016 for children and youth with french as a mother tongue?",HiTab
+which gourp of people were more likely to have experienced an inappropriate behaviour in public? sexual minority canadians with a disability or those who did not have a disability?,HiTab
+"Compare the predictive accuracy (using RMSE) of two single-variable linear regression models forecasting Swarm Alpha's along-track acceleration 3 hours ahead during May 11, 2024. Model 1 uses only OMNI Kp index as input; Model 2 uses only OMNI solar wind dynamic pressure (Pdyn) as input. Report both RMSE values on the test set in a list with format [number for Kp input, number for Pdyn input].",KramaBench
+Estimate the total count of satellite major altitude changes (change of altitude > 1000m within 12h) for satellite 48445 during 2024 using TLE history. Use skifield's itrf_xyz to estimate altitude from TLE.,KramaBench
+"Across the years, what was the percent of years the wet-dry index was increasing? Give your answer in percentage, round your answer to 2 decimal places.",KramaBench
+"What percentage (to 3 decimal places) of water samples collected from Massachusetts beaches during the 2013 bathing season exceeded bacterial standards, leading to temporary closures?",KramaBench
+"In 2016, what percentage (to 2 decimal places) of fires were brought under control with it raining moderately or heavily (>0.05 in) in the fire area on the same or a day before the control day? Assume that the narrowest diameter of the fire area is 1km. Under this assumption, if a weather station falls into the fire area, you can use the detailed weather observation from that station for that fire incident.",KramaBench
+Are the report counts of for 'frauds and other data' in 2024 consistent for the Metropolitan area of Miami-Fort Lauderdale-West Palm Beach? Answer True or False. No explanation needed.,KramaBench
+What is the ratio of reported credit card frauds between 2024 and 2020? (2024 reports ) / (2020 reports) and round to 4 decimal places,KramaBench
+"From 2007 to 2009 (inclusive), between fresh water beaches and marine beaches, which had a higher correlation between monthly rainfall and their exceedance rate in the summer (Jun, Jul, Aug)? Regions whose rainfall data effect Fresh water beaches are Boston, Chatham, Amherst, Ashburnham. Regions whose rainfall data effect Marine beaches are Boston and Chatham. Impute missing values with median of the month in non-missing years.",KramaBench
+What is the correlation between the proportion of generally unsafe air quality days according to the EPA and the amount of land affected by fires in 2024? Round to 2 decimal places.,KramaBench
+"Which fresh water beach is the most polluted since 2020 (inclusive)? Most polluted is defined as highest average exceedance rate since 2020, and only consider the beaches that are measured in all the years from 2020 to 2023 (inclusive).",KramaBench
+"Which customers have policy ID 583 with a closing date after March 1, 2018?",MMQA
+How many students live in cities that have at least one member in the 'Bootup Baltimore' club?,MMQA
+What is the average rating of songs performed by female artists from Bangladesh?,MMQA
+Which City Mall stores have scanners capable of scanning more than 20 color pages per minute?,MMQA
+What is the dorm name and student capacity of dorms that allow pets and what is the average age of female students enrolled in major 600?,MMQA
+What are the ids of all female students who play football?,MMQA
+Which team had the least number of attendances in home games in 1980?,MMQA
+What are the distinctly described colors of the herb products that have a recorded buying price?,MMQA
+How many unique projects have a patent outcome and are associated with the same organisation as the projects that have details 'sed' or 'beatae'?,MMQA
+What is the city location and the average salary of employees working in the same department as employee named Alexander Hunold?,MMQA
+The song American Girl featured on the soundtrack of Just Dance 2014 was by a singer born in what year ?,OTT-QA
+Who is the Princeton University graduate whose state is the fourth most populous ?,OTT-QA
+How many people does the German company established in 1964 by Ernst Schmidt and Wilhelm Schmidt-Ruthenbeck employ ?,OTT-QA
+Which Spanish club was founded first according to the Deloitte Football Money League in 2005 ?,OTT-QA
+"What Metro station is in the ward that was founded on March 15 , 1947 ?",OTT-QA
+How many million people live in the Australian state where the Royal National Park is ?,OTT-QA
+Which military force was the Austrian winner of silver in men 's single sculls at the Olympic Games of 1936 a member of ?,OTT-QA
+The armor listed as a Japanese National Treasure and laced with navy threads at Ōyamazumi Shrine was associated with the son of whom ?,OTT-QA
+What is the 2012 Kenyan Premier League team whose coach was born 11/30/1968 ?,OTT-QA
+What year was the head coach of the Eliteserien club with a style of playing often described as 'makrellfotball ' born ?,OTT-QA
+What is the first election year of the district Ed Towns is running in the 1998 United States House of Representatives election from New York?,OpenWikiTables
+What overall less than 421 position did Matt Clark play on the 2008 LSU Tigers baseball team in the 2008 Major League Baseball Draft?,OpenWikiTables
+Which team in the Walsall Senior Cup was runners-up the most times between 1950 and 1960?,OpenWikiTables
+What years did jersey number 55 play for Seattle Supersonics All-Time H Roster?,OpenWikiTables
+What was the chassis for Emilio de Villota in 1981?,OpenWikiTables
+What country is the player Stuart Appleby from who finished t1 in the 2002 Open Championship finals?,OpenWikiTables
+What is the lowest silver ranked 1 with a bronze score greater than 5 in the 2008-09 ISU Junior Grand Prix?,OpenWikiTables
+When was the game with Richmond away in the 10th round of the 1936 VFL season?,OpenWikiTables
+What is the state if the year of the first election is 1966 and if the member is Alan Jarman among the members of the Australian House of Representatives 1975-1977?,OpenWikiTables
+Who was on the progressive list when John T. Norton was on the Democratic list in the 1916 New York state election?,OpenWikiTables
+What will Inventories be like in 2015 if it develops with the same increasing rate as current? (in million),QTSumm
+"What was the total amount of the Total fixed maturities, available-for-sale in the sections where Non-U.S. government greater than -1? (in million)",QTSumm
+what was the percentage increase of income for the fiscal years of 2008 to 2010?,QTSumm
+what is the percentage increase in obligation for the mrrp from 2011 to 2012?,QTSumm
+what is the roi of global payments from 2004 to 2005?,QTSumm
+What was the average value of the AggregateAssets in the years where AggregateAssets is positive? (in million),QTSumm
+In which section the sum of Foreign government bonds has the highest value?,QTSumm
+"How much of Extensions, discoveries and other additions is there in total (in 2015) without Trinidad and Other international?",QTSumm
+"as of december 31 , 2008 , how much of the collateral related to short sales , repo's , or securities lending agreements?",QTSumm
+The amount for Total Incurred for Attritional for which Year Ended December 31 ranks first?,QTSumm
+"What are the ids and flavors of cakes, ordered by flavor?",Spider
+How many orders has each gender placed?,Spider
+"For each driver, return his or her name and country.",Spider
+What are all distinct countries where singers above age 20 are from?,Spider
+Return the unique boat ids (bid) of all reserved boats.,Spider
+List id of documents that in collection named Best but not in document subset Best for 2000.,Spider
+Show all product names without an order.,Spider
+What is the maximum rating for sailors?,Spider
+Return the template type code of the template that is used by a document named Data base.,Spider
+"For each building, return the address of the building and the name of the region it belongs to.",Spider
+"Look at the table. Then answer the question. At a price of $150, is there a shortage or a surplus?",TabMWP
+A museum curator counted the number of paintings in each exhibit at the art museum. How many exhibits have at least 50 paintings but fewer than 90 paintings?,TabMWP
+Peter counted the number of problems on each of his tests. How many tests had at least 10 problems but fewer than 50 problems?,TabMWP
+A pizza delivery driver paid attention to how many pizzas he delivered over the past 5 days. What is the mean of the numbers?,TabMWP
+How much more does a parrot cost than a python?,TabMWP
+"Mrs. McGee hosts an annual art contest for kids, and she keeps a record of the number of entries each year. According to the table, what was the rate of change between 2017 and 2018?",TabMWP
+A math textbook explains probability by showing a set of cards numbered 4 through 9 and showing the number of people who might draw each card. Which number was drawn the fewest times?,TabMWP
+How much more does a sailing trip package cost than a surfing adventure package?,TabMWP
+Josie has $17. How much money will Josie have left if she buys a book about music and a book about hiking?,TabMWP
+"Look at the table. Then answer the question. At a price of $695, is there a shortage or a surplus?",TabMWP
+"How many counties have a per capita income between $18,000 and $27,000?",TableBench
+What is the difference in Depth (km) between the earthquake with the highest Magnitude and the earthquake with the lowest Magnitude?,TableBench
+"In the context of racing, Win Rate is calculated as the total number of wins divided by the total number of races, multiplied by 100, indicating a driver's ability to win races. In which series the dirver has the highest Win Rate?",TableBench
+What is the average percentage increase in total mintage from one year to the next for the coins with an issue price of $34.95?,TableBench
+How does the prominence of a mountain change with increasing elevation in Papua New Guinea?,TableBench
+What is the total number of PR seats won by all parties combined?,TableBench
+What is the total number of locomotives at Doncaster and Pyewipe combined for the 'j17' and 'e4' classes?,TableBench
+"Please help me draw a stacked bar chart showing the trends in domestic flight passenger count, international flight non-CIS passenger count, and CIS passenger count from 2000 to 2013.",TableBench
+"What trend can be observed in the total revenue of the entity over the years, and what might be the projected total revenue for the next year?",TableBench
+"In the context of seismology, the Magnitude of an earthquake is a measure of its size, with higher magnitudes indicating more powerful earthquakes. What is the average Magnitude of the top 5 earthquakes in the table, ranked by their Death toll?",TableBench
+how many schools have at least 5 outright titles?,WikiTableQuestions
+what school is listed next after michigan technological university?,WikiTableQuestions
+"which is taller, mount humphreys or mount kaweah.",WikiTableQuestions
+which unesco goodwill ambassador is most known for the promotion of the chernobyl program?,WikiTableQuestions
+how many locations are bird sanctuaries.,WikiTableQuestions
+what is the total number of assemblers supporting small genomes type technologies?,WikiTableQuestions
+what section did they play in the most?,WikiTableQuestions
+"who won more gold medals, brazil or china?",WikiTableQuestions
+did al jackson air before or after kyle kinane?,WikiTableQuestions
+how many years was it before the first partly free status?,WikiTableQuestions
