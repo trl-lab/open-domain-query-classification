@@ -1,8 +1,8 @@
 {
     "name": "Sufficient Specification - Procedural Specification v3",
     "description": "Re-design prompt bases on best performing prompt that combined the specification dimensions; add focus on clarifying questions that indicate different types of underspecification.",
-    "results": [],
-    "observations": "./data/development/sufficient_specification/development_results/dev_results_09_data_10_procedural.parquet",
+    "results": ["./data/development/sufficient_specification/development_results/dev_results_09_data_10_procedural.parquet"],
+    "observations": "-",
     "prompt_template": {
         "messages": [
             {
