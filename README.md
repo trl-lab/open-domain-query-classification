@@ -1,8 +1,9 @@
 # Classifications of Open-Domain Queries for Tabular Data Analysis
 
-This repository contains the code for the classifiers underlying the experiments in the paper ["Are We Asking the Right
-Questions? On Ambiguity in Natural Language Queries for Tabular Data Analysis"](https://arxiv.org/abs/2511.04584), 
-accepted at the AI for Tabular Data workshop at EurIPS 2025.
+This repository contains the code, prompts, and data used to build and evaluate the classifiers presented in the paper 
+["Are We Asking the Right Questions? On Ambiguity in Natural Language Queries for Tabular Data 
+Analysis"](https://arxiv.org/abs/2511.04584). The work was accepted to the [AI for Tabular Data workshop at 
+EurIPS 2025](https://sites.google.com/view/eurips25-ai-td/home).
 
 
 ## Usage
@@ -10,7 +11,8 @@ accepted at the AI for Tabular Data workshop at EurIPS 2025.
 
 ### Setup
 
-First, make sure to install the required dependencies. This repository provides requirements configurations that can be synced with `pip` or `uv`. 
+First, make sure to install the required dependencies. This repository provides requirements configurations that can be 
+synced with `pip` or `uv`. 
 
 Install requirements with `pip`:
 
@@ -34,8 +36,10 @@ export OPENAI_API_KEY="your_openai_api_key"
 
 The classifiers can be run in a step-by-step manner in the respective notebooks:
 
-- [`01_DataPrivilegeClassification.ipynb``](./01_DataPrivilegeClassification.ipynb): Classifies whether a query requires privileged data access.
-- [`02_QuerySpecificationClassification.ipynb`](./02_QuerySpecificationClassification.ipynb): Classifies the specification of the query.
+- [`01_DataPrivilegeClassification.ipynb`](./01_DataPrivilegeClassification.ipynb): Classifies whether a query requires 
+privileged data access.
+- [`02_QuerySpecificationClassification.ipynb`](./02_QuerySpecificationClassification.ipynb): Classifies the
+specification of the query.
 
 ### Analysis and Visualization
 
@@ -45,11 +49,13 @@ The results of the classifiers are analyzed in the notebook [`03_Analysis.ipynb`
 
 **Code for reproducing results:** Find the main code in the jupyter notebooks in the root directory.
 
-**Shared Code:** Find the shared code for processing, classification, and prompt management in the [`common/`](./common) directory.
+**Shared Code:** Find the shared code for processing, classification, and prompt management in the [`common/`](./common)
+directory.
 
 **Data:** Find the input, development, and output data in the [`data/`](./data) directory.
 
-**Prompts:** Find the prompt templates used for classification in the [`prompts/`](./prompts) directory. In this directory you can also find a full history of the prompt engineering process in the `history` subdirectories.
+**Prompts:** Find the prompt templates used for classification in the [`prompts/`](./prompts) directory. In this
+directory you can also find a full history of the prompt engineering process in the `history` subdirectories.
 
 
 ## Citation
