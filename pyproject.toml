@@ -1,0 +1,14 @@
+[project]
+name = "tabular-analysis-query-classification"
+version = "1.0.0"
+description = "Code for the paper 'Are We Asking the Right Questions? On Ambiguity in Natural Language Queries for Tabular Data Analysis'"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "matplotlib>=3.10.7",
+    "openai>=2.8.0",
+    "openbatch",
+    "pandas>=2.3.3",
+    "pyarrow>=22.0.0",
+    "pydantic>=2.12.4",
+]
